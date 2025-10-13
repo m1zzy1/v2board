@@ -35,7 +35,7 @@ class EPay {
             'money' => $order['total_amount'] / 100,
             'name' => $order['trade_no'],
             'notify_url' => $order['notify_url'],
-            'return_url' => $order['v2board.app_url'],
+            'return_url' => config('v2board.app_url'),
             'out_trade_no' => $order['trade_no'],
             'pid' => $this->config['pid']
         ];
