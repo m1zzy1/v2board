@@ -159,7 +159,7 @@ class PaymentController extends Controller
         $channelMap = [
             'AlipayF2F' => '支付宝',
             'WechatPayNative' => '微信支付',
-            'EPay' => '微信/支付宝(推荐支付宝)',
+            'EPay' => '易支付',
             'StripeAlipay' => '支付宝(Stripe)',
             'StripeWepay' => '微信(Stripe)',
             'StripeCredit' => '信用卡(Stripe)',
