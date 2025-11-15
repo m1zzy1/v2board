@@ -18296,13 +18296,13 @@
             }
         }
         var x = "onloadcallback"
-          , O = "turnstile";
+          , O = "grecaptcha";
         function E() {
             return "undefined" !== typeof window && window.recaptchaOptions || {}
         }
         function _() {
             E();
-            return "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=".concat(x, "&render=explicit")
+            return "https://www.recaptcha.net/recaptcha/api.js?onload=".concat(x, "&render=explicit")
         }
         var k = w(_, {
             callbackName: x,
@@ -18314,18 +18314,8 @@
             constructor(e) {
                 super(e),
                 this.state = {
-                    visible: !1,
-                    captchaTs: Date.now(),
-                    captchaRetry: 0
-                },
-                this._inputRef = null
-            }
-            onCaptchaError() {
-                // 图片加载失败时自动刷新一次，最多重试2次
-                this.setState(t=>{
-                    var n = (t.captchaRetry || 0) + 1;
-                    return { captchaRetry: n, captchaTs: Date.now() };
-                })
+                    visible: !1
+                }
             }
             show() {
                 this.key = Math.random(),
@@ -18345,9 +18335,6 @@
                     visible: !1
                 })
             }
-            refreshCaptcha() {
-                this.setState({ captchaTs: Date.now() })
-            }
             render() {
                 var e = this.props.guest.commConfig;
                 return i.a.createElement(i.a.Fragment, null, i.a.cloneElement(this.props.children, {
@@ -18358,37 +18345,11 @@
                     onCancel: ()=>this.hide(),
                     footer: !1,
                     closable: !1,
-                    centered: !0,
-                    width: 360
-                }, i.a.createElement("div", { style: { display: "flex", justifyContent: "center" } },
-                    i.a.createElement("div", { style: { width: 320, display: "flex", flexDirection: "column", gap: 12 } },
-                        i.a.createElement("div", null,
-                            i.a.createElement("img", {
-                                alt: "captcha",
-                                style: { cursor: "pointer", borderRadius: 6, boxShadow: "0 1px 3px rgba(0,0,0,0.1)", width: "100%" },
-                                src: "/api/v1/guest/captcha?ts=" + this.state.captchaTs,
-                                onClick: ()=>this.refreshCaptcha(),
-                                onError: ()=>this.onCaptchaError()
-                            })
-                        ),
-                        i.a.createElement("div", null,
-                            i.a.createElement("input", {
-                                type: "text",
-                                placeholder: "请输入验证码",
-                                className: "form-control form-control-alt",
-                                style: { width: "100%" },
-                                ref: e=>this._inputRef = e
-                            })
-                        ),
-                        i.a.createElement("div", null,
-                            i.a.createElement("button", {
-                                type: "button",
-                                className: "btn btn-primary btn-block",
-                                onClick: ()=>this.handle(this._inputRef ? this._inputRef.value : "")
-                            }, "确认")
-                        )
-                    )
-                )));
+                    centered: !0
+                }, i.a.createElement(S, {
+                    sitekey: e.recaptcha_site_key,
+                    onChange: e=>this.handle(e)
+                })))
             }
         }
         t["a"] = Object(C["c"])(e=>{
@@ -31161,21 +31122,7 @@
                     className: "mb-3"
                 }, l.a.createElement("div", {
                     className: "v2board-shortcuts-item",
-                    onClick: ()=>h.a.push("/ticket")
-                }, l.a.createElement("div", null, Object(b["formatMessage"])({
-                    id: "\u9047\u5230\u95ee\u9898"
-                })), l.a.createElement("div", {
-                    className: "description"
-                }, Object(b["formatMessage"])({
-                    id: "\u9047\u5230\u95ee\u9898\u53ef\u4ee5\u901a\u8fc7\u5de5\u5355\u4e0e\u6211\u4eec\u6c9f\u901a"
-                })), l.a.createElement("i", {
-                    style: {
-                        float: "right"
-                    },
-                    className: "nav-main-link-icon si si-support"
-                })), l.a.createElement("div", {
-                    className: "v2board-shortcuts-item",
-                    onClick: ()=>h.a.push("/knowledge/ticket")
+                    onClick: ()=>h.a.push("/knowledge")
                 }, l.a.createElement("div", null, Object(b["formatMessage"])({
                     id: "\u67e5\u770b\u6559\u7a0b"
                 })), l.a.createElement("div", {
@@ -31216,6 +31163,20 @@
                         float: "right"
                     },
                     className: "nav-main-link-icon si si-".concat(Object(p["m"])(d) ? "clock" : "bag")
+                })), l.a.createElement("div", {
+                    className: "v2board-shortcuts-item",
+                    onClick: ()=>h.a.push("/ticket")
+                }, l.a.createElement("div", null, Object(b["formatMessage"])({
+                    id: "\u9047\u5230\u95ee\u9898"
+                })), l.a.createElement("div", {
+                    className: "description"
+                }, Object(b["formatMessage"])({
+                    id: "\u9047\u5230\u95ee\u9898\u53ef\u4ee5\u901a\u8fc7\u5de5\u5355\u4e0e\u6211\u4eec\u6c9f\u901a"
+                })), l.a.createElement("i", {
+                    style: {
+                        float: "right"
+                    },
+                    className: "nav-main-link-icon si si-support"
                 })))))))))), this.state.notice && l.a.createElement(c["a"], {
                     title: this.state.notice.title,
                     visible: this.state.visible,

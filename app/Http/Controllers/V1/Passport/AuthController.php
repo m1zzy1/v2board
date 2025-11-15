@@ -16,8 +16,7 @@ use App\Utils\Dict;
 use App\Utils\Helper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
-use ReCaptcha\ReCaptcha;
-use App\Services\LocalCaptchaService;
+use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
@@ -85,7 +84,19 @@ class AuthController extends Controller
             }
         }
         if ((int)config('v2board.recaptcha_enable', 0)) {
-            if (!LocalCaptchaService::verify($request, $request->input('recaptcha_data'))) {
+            $token = $request->input('recaptcha_data') ?? $request->input('cf-turnstile-response');
+            if (empty($token)) {
+                abort(500, __('Invalid code is incorrect'));
+            }
+
+            $secret = config('v2board.turnstile_secret', config('v2board.recaptcha_key'));
+            $resp = Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
+                'secret' => $secret,
+                'response' => $token,
+                'remoteip' => $request->ip(),
+            ]);
+
+            if (!$resp->successful() || !data_get($resp->json(), 'success')) {
                 abort(500, __('Invalid code is incorrect'));
             }
         }
