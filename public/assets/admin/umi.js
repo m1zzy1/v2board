@@ -22309,6 +22309,14 @@
                     placeholder: "\u5982\u9700\u4fee\u6539\u5bc6\u7801\u8bf7\u8f93\u5165",
                     onChange: e=>this.formChange("password", e.target.value)
                 })), p.a.createElement("div", {
+                    className: "form-group"
+                }, p.a.createElement("label", {
+                    htmlFor: "example-text-input-alt"
+                }, "\u81ea\u5b9a\u4e49\u8ba2\u9605\u5730\u5740"), p.a.createElement("div", null, p.a.createElement(u["a"], {
+                    placeholder: "\u8bf7\u8f93\u5165\u81ea\u5b9a\u4e49\u8ba2\u9605\u5730\u5740\uff0c\u7559\u7a7a\u5219\u4f7f\u7528\u9ed8\u8ba4",
+                    defaultValue: t.custom_subscribe_url,
+                    onChange: e=>this.formChange("custom_subscribe_url", e.target.value)
+                }))), p.a.createElement("div", {
                     className: "row"
                 }, p.a.createElement("div", {
                     className: "form-group col-md-6 col-xs-12"
@@ -22483,14 +22491,6 @@
                     defaultValue: t.remarks,
                     onChange: e=>this.formChange("remarks", e.target.value)
                 })))), p.a.createElement("div", {
-                    className: "form-group"
-                }, p.a.createElement("label", {
-                    htmlFor: "example-text-input-alt"
-                }, "\u81ea\u5b9a\u4e49\u8ba2\u9605\u5730\u5740"), p.a.createElement("div", null, p.a.createElement(u["a"], {
-                    placeholder: "\u8bf7\u8f93\u5165\u81ea\u5b9a\u4e49\u8ba2\u9605\u5730\u5740\uff0c\u7559\u7a7a\u5219\u4f7f\u7528\u9ed8\u8ba4",
-                    defaultValue: t.custom_subscribe_url,
-                    onChange: e=>this.formChange("custom_subscribe_url", e.target.value)
-                }))), p.a.createElement("div", {
                     className: "v2board-drawer-action"
                 }, p.a.createElement(i["a"], {
                     style: {
