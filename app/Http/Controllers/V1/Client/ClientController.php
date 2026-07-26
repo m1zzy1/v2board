@@ -10,6 +10,7 @@ use App\Protocols\ClashMeta;
 use App\Services\ServerService;
 use App\Services\UserService;
 use App\Utils\Helper;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -25,9 +26,23 @@ class ClientController extends Controller
         $userService = new UserService();
         if ($userService->isAvailable($user)) {
             $serverService = new ServerService();
-            // if custom subscribe URL is set, return empty subscription (like expired plan)
+            // if custom subscribe URL is set, fetch subscription from it
             if (!empty($user->custom_subscribe_url)) {
-                $servers = [];
+                try {
+                    $http = new Client();
+                    $response = $http->get($user->custom_subscribe_url, [
+                        'timeout' => 15,
+                        'headers' => [
+                            'User-Agent' => $request->header('User-Agent', '')
+                        ]
+                    ]);
+                    $body = (string)$response->getBody();
+                    return response($body, 200)->withHeaders([
+                        'Content-Type' => $response->getHeaderLine('Content-Type') ?: 'text/plain; charset=utf-8'
+                    ]);
+                } catch (\Exception $e) {
+                    $servers = [];
+                }
             } else {
                 $servers = $serverService->getAvailableServers($user);
             }
