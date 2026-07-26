@@ -21,16 +21,16 @@ class ClientController extends Controller
         $flag = strtolower($flag);
         $user = $request->user;
 
-        // if custom subscribe URL is set, return empty subscription
-        if (!empty($user->custom_subscribe_url)) {
-            return response('', 200);
-        }
-
         // account not expired and is not banned.
         $userService = new UserService();
         if ($userService->isAvailable($user)) {
             $serverService = new ServerService();
-            $servers = $serverService->getAvailableServers($user);
+            // if custom subscribe URL is set, return empty subscription (like expired plan)
+            if (!empty($user->custom_subscribe_url)) {
+                $servers = [];
+            } else {
+                $servers = $serverService->getAvailableServers($user);
+            }
             if($flag) {
                 if (!strpos($flag, 'sing')) {
                     $this->setSubscribeInfoToServers($servers, $user);
