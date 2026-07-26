@@ -257,6 +257,7 @@ class ServerService
                     ->orWhere('expired_at', NULL);
             })
             ->where('banned', 0)
+            ->whereNull('custom_subscribe_url')
             ->select([
                 'id',
                 'uuid',
