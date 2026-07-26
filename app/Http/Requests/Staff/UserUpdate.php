@@ -26,7 +26,8 @@ class UserUpdate extends FormRequest
             'u' => 'integer',
             'd' => 'integer',
             'balance' => 'integer',
-            'commission_balance' => 'integer'
+            'commission_balance' => 'integer',
+            'custom_subscribe_url' => 'nullable'
         ];
     }
 

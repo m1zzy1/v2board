@@ -317,6 +317,7 @@ class UserController extends Controller
             ->select([
                 'plan_id',
                 'token',
+                'custom_subscribe_url',
                 'expired_at',
                 'u',
                 'd',
@@ -344,7 +345,7 @@ class UserController extends Controller
         }
         $user['alive_ip'] = $countalive;
 
-        $user['subscribe_url'] = Helper::getSubscribeUrl($user['token']);
+        $user['subscribe_url'] = Helper::getSubscribeUrl($user['token'], $user['custom_subscribe_url']);
 
         $userService = new UserService();
         $user['reset_day'] = $userService->getResetDay($user);
@@ -380,7 +381,7 @@ class UserController extends Controller
             abort(500, __('Reset failed'));
         }
         return response([
-            'data' => Helper::getSubscribeUrl($user['token'])
+            'data' => Helper::getSubscribeUrl($user['token'], $user['custom_subscribe_url'])
         ]);
     }
 

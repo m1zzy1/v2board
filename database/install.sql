@@ -576,6 +576,7 @@ CREATE TABLE `v2_user` (
                            `remind_expire` tinyint(4) DEFAULT '1',
                            `remind_traffic` tinyint(4) DEFAULT '1',
                            `token` char(32) NOT NULL,
+                           `custom_subscribe_url` varchar(512) DEFAULT NULL COMMENT 'Custom subscribe URL',
                            `expired_at` bigint(20) DEFAULT '0',
                            `remarks` text,
                            `created_at` int(11) NOT NULL,

@@ -859,3 +859,5 @@ CHANGE `action_value` `action_value` text NULL AFTER `action`;
 
 ALTER TABLE `v2_server_v2node`
 ADD `trusted_x_forwarded_for` varchar(255) COLLATE 'utf8mb4_general_ci' NULL COMMENT '信任的x-forwarded-for头部' AFTER `network_settings`;
+ALTER TABLE `v2_user`
+ADD `custom_subscribe_url` varchar(512) COLLATE 'utf8mb4_general_ci' DEFAULT NULL COMMENT 'Custom subscribe URL' AFTER `token`;
