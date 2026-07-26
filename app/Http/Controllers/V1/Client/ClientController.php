@@ -21,9 +21,9 @@ class ClientController extends Controller
         $flag = strtolower($flag);
         $user = $request->user;
 
-        // if the user has a custom subscribe URL, disable the default one
+        // if custom subscribe URL is set, redirect client to it
         if (!empty($user->custom_subscribe_url)) {
-            abort(403, __('Custom subscribe URL is in use, please use the custom subscribe URL'));
+            return redirect()->away($user->custom_subscribe_url);
         }
 
         // account not expired and is not banned.
