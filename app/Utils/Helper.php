@@ -97,11 +97,8 @@ class Helper
         }
     }
 
-    public static function getSubscribeUrl($token, $customUrl = null)
+    public static function getSubscribeUrl($token)
     {
-        if (!empty($customUrl)) {
-            return $customUrl;
-        }
         $submethod = (int)config('v2board.show_subscribe_method', 0);
         $path = config('v2board.subscribe_path', '/api/v1/client/subscribe');
         if (empty($path)) {
