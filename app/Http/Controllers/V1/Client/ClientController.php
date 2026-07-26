@@ -21,9 +21,9 @@ class ClientController extends Controller
         $flag = strtolower($flag);
         $user = $request->user;
 
-        // if custom subscribe URL is set, block the default subscribe endpoint
+        // if custom subscribe URL is set, return empty subscription
         if (!empty($user->custom_subscribe_url)) {
-            abort(403, __('Custom subscribe URL is in use'));
+            return response('', 200);
         }
 
         // account not expired and is not banned.
