@@ -20,6 +20,12 @@ class ClientController extends Controller
             ?? ($_SERVER['HTTP_USER_AGENT'] ?? '');
         $flag = strtolower($flag);
         $user = $request->user;
+
+        // if the user has a custom subscribe URL, disable the default one
+        if (!empty($user->custom_subscribe_url)) {
+            abort(403, __('Custom subscribe URL is in use, please use the custom subscribe URL'));
+        }
+
         // account not expired and is not banned.
         $userService = new UserService();
         if ($userService->isAvailable($user)) {
