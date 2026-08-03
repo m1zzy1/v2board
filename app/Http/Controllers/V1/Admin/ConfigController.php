@@ -116,6 +116,9 @@ class ConfigController extends Controller
                 'show_info_to_server_enable' => (int)config('v2board.show_info_to_server_enable', 0),
                 'show_subscribe_method' => (int)config('v2board.show_subscribe_method', 0),
                 'show_subscribe_expire' => (int)config('v2board.show_subscribe_expire', 5),
+                'subscribe_limit_enable' => (int)config('v2board.subscribe_limit_enable', 0),
+                'subscribe_limit_count' => (int)config('v2board.subscribe_limit_count', 60),
+                'subscribe_limit_expire' => (int)config('v2board.subscribe_limit_expire', 1),
             ],
             'frontend' => [
                 'frontend_theme' => config('v2board.frontend_theme', 'v2board'),

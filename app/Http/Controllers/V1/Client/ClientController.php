@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\V1\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Protocols\General;
 use App\Protocols\Singbox\Singbox;
 use App\Protocols\Singbox\SingboxOld;
@@ -12,6 +13,7 @@ use App\Services\UserService;
 use App\Utils\Helper;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ClientController extends Controller
 {
@@ -21,6 +23,26 @@ class ClientController extends Controller
             ?? ($_SERVER['HTTP_USER_AGENT'] ?? '');
         $flag = strtolower($flag);
         $user = $request->user;
+
+        // Subscription fetch rate limit: reset UUID & subscribe URL when exceeded within a window
+        if ((int)config('v2board.subscribe_limit_enable', 0)) {
+            $limitCount = (int)config('v2board.subscribe_limit_count', 60);
+            $limitExpire = (int)config('v2board.subscribe_limit_expire', 1);
+            if ($limitExpire <= 0) {
+                $limitExpire = 1;
+            }
+            $cacheKey = 'subscribe_limit_' . $user['id'];
+            Cache::add($cacheKey, 0, $limitExpire * 60);
+            $count = Cache::increment($cacheKey);
+            if ($count > $limitCount) {
+                $resetUser = User::find($user['id']);
+                if ($resetUser) {
+                    (new UserService())->resetSecurity($resetUser);
+                }
+                Cache::forget($cacheKey);
+                abort(403, __('Subscription has been reset due to too many requests, please refresh the subscription URL'));
+            }
+        }
 
         // account not expired and is not banned.
         $userService = new UserService();

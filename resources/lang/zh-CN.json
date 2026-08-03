@@ -1,5 +1,6 @@
 {
     "The user does not exist": "该用户不存在",
+    "Subscription has been reset due to too many requests, please refresh the subscription URL": "订阅请求过于频繁，订阅地址已被重置，请刷新获取新的订阅地址",
     "The old password is wrong": "旧密码有误",
     "Save failed": "保存失败",
     "Subscription plan does not exist": "订阅计划不存在",

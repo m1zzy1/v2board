@@ -8,6 +8,7 @@ use App\Jobs\TrafficFetchJob;
 use App\Models\Order;
 use App\Models\Plan;
 use App\Models\User;
+use App\Utils\Helper;
 
 class UserService
 {
@@ -226,6 +227,19 @@ class UserService
         TrafficFetchJob::dispatch($data, $server, $protocol);
         StatUserJob::dispatch($data, $server, $protocol, 'd');
         StatServerJob::dispatch($data, $server, $protocol, 'd');
+    }
+
+    /**
+     * 重置用户 UUID 及订阅 Token（订阅 URL），用于安全防护
+     *
+     * @param User $user
+     * @return bool
+     */
+    public function resetSecurity(User $user): bool
+    {
+        $user->uuid = Helper::guid(true);
+        $user->token = Helper::guid();
+        return $user->save();
     }
 
     public static function getMaxId()

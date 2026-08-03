@@ -6024,7 +6024,33 @@
                     placeholder: "\u8bf7\u8f93\u5165",
                     defaultValue: r.show_subscribe_expire,
                     onChange: e=>this.set("safe", "show_subscribe_expire", e.target.value)
-                })) : "")), f.a.createElement(s["a"].TabPane, {
+                })) : "", f.a.createElement(m, {
+                    title: "\u8ba2\u9605\u62c9\u53d6\u9891\u7387\u9650\u5236",
+                    description: "\u5f00\u542f\u540e\uff0c\u5728\u6307\u5b9a\u65f6\u95f4\u7a97\u53e3\u5185\u62c9\u53d6\u8ba2\u9605\u8d85\u8fc7\u6307\u5b9a\u6b21\u6570\uff0c\u5c06\u81ea\u52a8\u91cd\u7f6eUUID\u53ca\u8ba2\u9605\u5730\u5740\u3002"
+                }, f.a.createElement(l["a"], {
+                    checked: parseInt(r.subscribe_limit_enable),
+                    onChange: e=>this.set("subscribe", "subscribe_limit_enable", e ? 1 : 0)
+                })), r.subscribe_limit_enable ? f.a.createElement(f.a.Fragment, null, f.a.createElement(m, {
+                    isChildren: !0,
+                    title: "\u7a97\u53e3\u5185\u6700\u5927\u62c9\u53d6\u6b21\u6570",
+                    description: "\u65f6\u95f4\u7a97\u53e3\u5185\u5141\u8bb8\u7684\u6700\u5927\u8ba2\u9605\u62c9\u53d6\u6b21\u6570\uff0c\u8d85\u8fc7\u5c06\u89e6\u53d1\u81ea\u52a8\u91cd\u7f6e\u3002"
+                }, f.a.createElement("input", {
+                    type: "text",
+                    className: "form-control",
+                    placeholder: "\u8bf7\u8f93\u5165",
+                    defaultValue: r.subscribe_limit_count,
+                    onChange: e=>this.set("subscribe", "subscribe_limit_count", e.target.value)
+                })), f.a.createElement(m, {
+                    isChildren: !0,
+                    title: "\u65f6\u95f4\u7a97\u53e3\uff08\u5206\u949f\uff09",
+                    description: "\u5728\u6b64\u65f6\u95f4\u5185\u7684\u62c9\u53d6\u6b21\u6570\u8fbe\u5230\u4e0a\u9650\u5c06\u89e6\u53d1\u81ea\u52a8\u91cd\u7f6e\u3002"
+                }, f.a.createElement("input", {
+                    type: "text",
+                    className: "form-control",
+                    placeholder: "\u8bf7\u8f93\u5165",
+                    defaultValue: r.subscribe_limit_expire,
+                    onChange: e=>this.set("subscribe", "subscribe_limit_expire", e.target.value)
+                }))) : "")), f.a.createElement(s["a"].TabPane, {
                     tab: "\u5145\u503c",
                     key: "deposit"
                 }, f.a.createElement("div", {

@@ -374,9 +374,8 @@ class UserController extends Controller
         if (!$user) {
             abort(500, __('The user does not exist'));
         }
-        $user->uuid = Helper::guid(true);
-        $user->token = Helper::guid();
-        if (!$user->save()) {
+        $userService = new UserService();
+        if (!$userService->resetSecurity($user)) {
             abort(500, __('Reset failed'));
         }
         return response([
