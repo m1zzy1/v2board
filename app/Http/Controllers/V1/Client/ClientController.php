@@ -9,6 +9,7 @@ use App\Protocols\Singbox\Singbox;
 use App\Protocols\Singbox\SingboxOld;
 use App\Protocols\ClashMeta;
 use App\Services\ServerService;
+use App\Services\TelegramService;
 use App\Services\UserService;
 use App\Utils\Helper;
 use GuzzleHttp\Client;
@@ -24,7 +25,7 @@ class ClientController extends Controller
         $flag = strtolower($flag);
         $user = $request->user;
 
-        // Subscription fetch rate limit: reset UUID & subscribe URL when exceeded within a window
+        // Subscription link rate limit: reset UUID & subscribe URL when exceeded within a window
         if ((int)config('v2board.subscribe_limit_enable', 0)) {
             $limitCount = (int)config('v2board.subscribe_limit_count', 60);
             $limitExpire = (int)config('v2board.subscribe_limit_expire', 1);
@@ -38,6 +39,8 @@ class ClientController extends Controller
                 $resetUser = User::find($user['id']);
                 if ($resetUser) {
                     (new UserService())->resetSecurity($resetUser);
+                    $message = "🔐订阅链接频率限制触发重置\n———————————————\n邮箱：\n`{$resetUser->email}`\n用户ID：\n`{$resetUser->id}`\nIP：\n`{$request->ip()}`\n窗口内拉取次数：\n`{$count}`\n时间：\n`" . date('Y-m-d H:i:s') . "`\n该账号因订阅拉取过于频繁，已自动重置UUID及订阅地址。";
+                    (new TelegramService())->sendMessageWithAdmin($message, true);
                 }
                 Cache::forget($cacheKey);
                 abort(403, __('Subscription has been reset due to too many requests, please refresh the subscription URL'));

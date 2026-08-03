@@ -44835,7 +44835,7 @@
                                     }
                                     return n.abrupt("return");
                                 case 11:
-                                    r["a"].success("\u4fee\u6539\u6210\u529f\uff0c\u8bf7\u91cd\u65b0\u767b\u9646"),
+                                    r["a"].success("\u4fee\u6539\u6210\u529f\uff0c\u8bf7\u91cd\u65b0\u767b\u5f55"),
                                     c.a.push("/login");
                                 case 13:
                                 case "end":

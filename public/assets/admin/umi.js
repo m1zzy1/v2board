@@ -5893,7 +5893,7 @@
                     onChange: e=>this.set("safe", "register_limit_expire", e.target.value)
                 }))) : "", f.a.createElement(m, {
                     title: "\u9632\u7206\u7834\u9650\u5236",
-                    description: "\u5f00\u542f\u540e\u5982\u679c\u8be5\u8d26\u6237\u5c1d\u8bd5\u767b\u9646\u5931\u8d25\u6b21\u6570\u8fc7\u591a\u5c06\u4f1a\u88ab\u9650\u5236\u3002"
+                    description: "\u5f00\u542f\u540e\u5982\u679c\u8be5\u8d26\u6237\u5c1d\u8bd5\u767b\u5f55\u5931\u8d25\u6b21\u6570\u8fc7\u591a\u5c06\u4f1a\u88ab\u9650\u5236\u3002"
                 }, f.a.createElement(l["a"], {
                     checked: parseInt(_.password_limit_enable),
                     onChange: e=>this.set("safe", "password_limit_enable", e ? 1 : 0)
@@ -5910,7 +5910,7 @@
                 })), f.a.createElement(m, {
                     isChildren: !0,
                     title: "\u60e9\u7f5a\u65f6\u95f4(\u5206\u949f)",
-                    description: "\u9700\u8981\u7b49\u5f85\u60e9\u7f5a\u65f6\u95f4\u8fc7\u540e\u624d\u53ef\u4ee5\u518d\u6b21\u767b\u9646\u3002"
+                    description: "\u9700\u8981\u7b49\u5f85\u60e9\u7f5a\u65f6\u95f4\u8fc7\u540e\u624d\u53ef\u4ee5\u518d\u6b21\u767b\u5f55\u3002"
                 }, f.a.createElement("input", {
                     type: "text",
                     className: "form-control",
@@ -6025,7 +6025,7 @@
                     defaultValue: r.show_subscribe_expire,
                     onChange: e=>this.set("safe", "show_subscribe_expire", e.target.value)
                 })) : "", f.a.createElement(m, {
-                    title: "\u8ba2\u9605\u62c9\u53d6\u9891\u7387\u9650\u5236",
+                    title: "\u8ba2\u9605\u94fe\u63a5\u9891\u7387\u9650\u5236",
                     description: "\u5f00\u542f\u540e\uff0c\u5728\u6307\u5b9a\u65f6\u95f4\u7a97\u53e3\u5185\u62c9\u53d6\u8ba2\u9605\u8d85\u8fc7\u6307\u5b9a\u6b21\u6570\uff0c\u5c06\u81ea\u52a8\u91cd\u7f6eUUID\u53ca\u8ba2\u9605\u5730\u5740\u3002"
                 }, f.a.createElement(l["a"], {
                     checked: parseInt(r.subscribe_limit_enable),
@@ -6409,7 +6409,7 @@
                 }
                 ))), f.a.createElement(m, {
                     title: "\u53d1\u9001\u6d4b\u8bd5\u90ae\u4ef6",
-                    description: "\u90ae\u4ef6\u5c06\u4f1a\u53d1\u9001\u5230\u5f53\u524d\u767b\u9646\u7528\u6237\u90ae\u7bb1"
+                    description: "\u90ae\u4ef6\u5c06\u4f1a\u53d1\u9001\u5230\u5f53\u524d\u767b\u5f55\u7528\u6237\u90ae\u7bb1"
                 }, f.a.createElement(o["a"], {
                     loading: x,
                     type: "primary",
