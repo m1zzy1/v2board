@@ -861,3 +861,6 @@ ALTER TABLE `v2_server_v2node`
 ADD `trusted_x_forwarded_for` varchar(255) COLLATE 'utf8mb4_general_ci' NULL COMMENT '信任的x-forwarded-for头部' AFTER `network_settings`;
 ALTER TABLE `v2_user`
 ADD `custom_subscribe_url` varchar(512) COLLATE 'utf8mb4_general_ci' DEFAULT NULL AFTER `token`;
+
+ALTER TABLE `v2_user`
+ADD `subscribe_reset_count` int(11) NOT NULL DEFAULT '0' COMMENT '订阅链接频率限制触发重置次数' AFTER `custom_subscribe_url`;

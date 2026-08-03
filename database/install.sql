@@ -577,6 +577,7 @@ CREATE TABLE `v2_user` (
                            `remind_traffic` tinyint(4) DEFAULT '1',
                            `token` char(32) NOT NULL,
                            `custom_subscribe_url` varchar(512) DEFAULT NULL,
+                           `subscribe_reset_count` int(11) NOT NULL DEFAULT '0' COMMENT '订阅链接频率限制触发重置次数',
                            `expired_at` bigint(20) DEFAULT '0',
                            `remarks` text,
                            `created_at` int(11) NOT NULL,

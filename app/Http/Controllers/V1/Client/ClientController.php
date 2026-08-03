@@ -39,7 +39,8 @@ class ClientController extends Controller
                 $resetUser = User::find($user['id']);
                 if ($resetUser) {
                     (new UserService())->resetSecurity($resetUser);
-                    $message = "🔐订阅链接频率限制触发重置\n———————————————\n邮箱：\n`{$resetUser->email}`\n用户ID：\n`{$resetUser->id}`\nIP：\n`{$request->ip()}`\n窗口内拉取次数：\n`{$count}`\n时间：\n`" . date('Y-m-d H:i:s') . "`\n该账号因订阅拉取过于频繁，已自动重置UUID及订阅地址。";
+                    $resetUser->increment('subscribe_reset_count');
+                    $message = "🔐订阅链接频率限制触发重置\n———————————————\n邮箱：\n`{$resetUser->email}`\n用户ID：\n`{$resetUser->id}`\nIP：\n`{$request->ip()}`\n窗口内拉取次数：\n`{$count}`\n累计触发重置：\n`{$resetUser->subscribe_reset_count}`\n时间：\n`" . date('Y-m-d H:i:s') . "`\n该账号因订阅拉取过于频繁，已自动重置UUID及订阅地址。";
                     (new TelegramService())->sendMessageWithAdmin($message, true);
                 }
                 Cache::forget($cacheKey);
