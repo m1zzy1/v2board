@@ -5958,13 +5958,7 @@
                 }, f.a.createElement(l["a"], {
                     checked: parseInt(r.allow_new_period),
                     onChange: e=>this.set("subscribe", "allow_new_period", e ? 1 : 0)
-                })), f.a.createElement(m, {
-                    title: "\u81ea\u5b9a\u4e49\u63d0\u524d\u5f00\u542f\u5468\u671f\u6700\u4f4e\u4f7f\u7528\u7387",
-                    description: "\u5f00\u542f\u540e\u53ef\u6309\u6307\u5b9a\u767e\u5206\u6bd4\u63d0\u524d\u5f00\u542f\u4e0b\u4e00\u4e2a\u6d41\u91cf\u5468\u671f\uff0c\u5173\u95ed\u5219\u9700\u7528\u5c3d\u6d41\u91cf\u3002"
-                }, f.a.createElement(l["a"], {
-                    checked: parseInt(r.new_period_min_usage_enable),
-                    onChange: e=>this.set("subscribe", "new_period_min_usage_enable", e ? 1 : 0)
-                })), r.new_period_min_usage_enable ? f.a.createElement(f.a.Fragment, null, f.a.createElement(m, {
+                })), r.allow_new_period ? f.a.createElement(f.a.Fragment, null, f.a.createElement(m, {
                     isChildren: !0,
                     title: "\u6700\u4f4e\u4f7f\u7528\u7387\uff08%\uff09",
                     description: "\u6d41\u91cf\u4f7f\u7528\u7387\u8fbe\u5230\u8be5\u767e\u5206\u6bd4\u540e\uff0c\u7528\u6237\u624d\u53ef\u63d0\u524d\u5f00\u542f\u4e0b\u4e00\u4e2a\u6d41\u91cf\u5468\u671f\u3002"
