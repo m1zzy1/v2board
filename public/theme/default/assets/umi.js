@@ -31076,7 +31076,7 @@
                     onClick: ()=>this.resetPackage()
                 }, Object(b["formatMessage"])({
                     id: "\u8d2d\u4e70\u6d41\u91cf\u91cd\u7f6e\u5305"
-                }))), d.allow_new_period && y >= d.new_period_min_usage && !Object(p["h"])(d.expired_at) ? l.a.createElement("div", {
+                }))), d.allow_new_period && y >= (d.new_period_min_usage_enable ? d.new_period_min_usage : 100) && !Object(p["h"])(d.expired_at) ? l.a.createElement("div", {
                     className: "mb-4"
                 }, l.a.createElement(i["a"], {
                     type: "primary",
