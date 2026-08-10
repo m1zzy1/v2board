@@ -98,10 +98,7 @@ class UserController extends Controller
             if (!$user) {
                 abort(500, __('The user does not exist'));
             }
-            $minUsage = (int)config('v2board.new_period_min_usage', 100);
-            $usedUsage = $user->u + $user->d;
-            $usedPercent = $user->transfer_enable > 0 ? $usedUsage * 100 / $user->transfer_enable : 0;
-            if ($usedPercent < $minUsage) {
+            if ($user->transfer_enable > $user->u + $user->d) {
                 abort(500, __('You have not used up your traffic, you cannot renew your subscription'));
             }
             $userService = new UserService();
@@ -352,7 +349,6 @@ class UserController extends Controller
         $userService = new UserService();
         $user['reset_day'] = $userService->getResetDay($user);
         $user['allow_new_period'] = config('v2board.allow_new_period', 0);
-        $user['new_period_min_usage'] = config('v2board.new_period_min_usage', 100);
         return response([
             'data' => $user
         ]);
