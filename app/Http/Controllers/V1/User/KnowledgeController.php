@@ -16,10 +16,13 @@ class KnowledgeController extends Controller
         if ($request->input('id')) {
             $knowledge = Knowledge::where('id', $request->input('id'))
                 ->where('show', 1)
-                ->first()
-                ->toArray();
+                ->first();
+            // 空结果先判 null（原代码 first()->toArray() 在查不到时直接致命错误）
             if (!$knowledge) abort(500, __('Article does not exist'));
+            $knowledge = $knowledge->toArray();
             $user = User::find($request->user['id']);
+            // isAvailable 有非空类型约束，null 会抛 TypeError
+            if (!$user) abort(500, __('The user does not exist'));
             $userService = new UserService();
             if (!$userService->isAvailable($user)) {
                 $this->formatAccessData($knowledge['body']);

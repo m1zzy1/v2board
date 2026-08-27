@@ -14,8 +14,10 @@ class KnowledgeController extends Controller
     public function fetch(Request $request)
     {
         if ($request->input('id')) {
-            $knowledge = Knowledge::find($request->input('id'))->toArray();
+            $knowledge = Knowledge::find($request->input('id'));
+            // 空结果先判 null（原代码 find()->toArray() 在查不到时直接致命错误）
             if (!$knowledge) abort(500, '知识不存在');
+            $knowledge = $knowledge->toArray();
             return response([
                 'data' => $knowledge
             ]);
@@ -43,8 +45,12 @@ class KnowledgeController extends Controller
                 abort(500, '创建失败');
             }
         } else {
+            // find 可能返回 null（null 上调 update() 是 Error，catch(\Exception) 接不住）；判空须在 try 外，
+            // 否则 abort 的 HttpException 会被下面的 catch 吞掉、统一报成“保存失败”
+            $knowledge = Knowledge::find($request->input('id'));
+            if (!$knowledge) abort(500, '知识不存在');
             try {
-                Knowledge::find($request->input('id'))->update($params);
+                $knowledge->update($params);
             } catch (\Exception $e) {
                 abort(500, '保存失败');
             }
@@ -79,7 +85,9 @@ class KnowledgeController extends Controller
         DB::beginTransaction();
         try {
             foreach ($request->input('knowledge_ids') as $k => $v) {
+                // 条目可能已被删除：跳过（null 上设属性是 Error，catch(\Exception) 接不住）
                 $knowledge = Knowledge::find($v);
+                if (!$knowledge) continue;
                 $knowledge->timestamps = false;
                 $knowledge->update(['sort' => $k + 1]);
             }
