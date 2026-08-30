@@ -42,6 +42,13 @@ class EpayMapi
                 'description' => '必填：alipay 或 wxpay；MAPI 不允许留空',
                 'type' => 'input',
             ],
+            'return_domain' => [
+                'label' => '自定义跳转域名',
+                'description' => '支付完成后用户跳转的域名（如：https://yourdomain.com），留空使用默认域名',
+                'type' => 'input',
+            ],
+            'min_amount' => ['label' => '最小付款金额（元）', 'description' => '留空或0表示不限制', 'type' => 'input'],
+            'max_amount' => ['label' => '最大付款金额（元）', 'description' => '留空或0表示不限制', 'type' => 'input'],
         ];
     }
 
@@ -49,12 +56,33 @@ class EpayMapi
     {
         $this->validateConfig();
 
+        $this->checkAmount(round(((int) $order['total_amount']) / 100, 2));
+
+        // 仅修改支付完成后的跳转地址，回调地址保持不变。
+        $returnUrl = (string) ($order['return_url'] ?? '');
+        if (!empty($this->config['return_domain']) && $returnUrl !== '') {
+            $customDomain = rtrim((string) $this->config['return_domain'], '/');
+            $parsedUrl = parse_url($returnUrl);
+
+            // 保留原跳转地址的路径、查询参数和片段，只替换域名。
+            $returnUrl = $customDomain;
+            if (isset($parsedUrl['path'])) {
+                $returnUrl .= $parsedUrl['path'];
+            }
+            if (isset($parsedUrl['query'])) {
+                $returnUrl .= '?' . $parsedUrl['query'];
+            }
+            if (isset($parsedUrl['fragment'])) {
+                $returnUrl .= '#' . $parsedUrl['fragment'];
+            }
+        }
+
         $params = [
             'pid' => (string) $this->config['pid'],
             'type' => (string) $this->config['type'],
             'out_trade_no' => (string) $order['trade_no'],
             'notify_url' => (string) $order['notify_url'],
-            'return_url' => (string) ($order['return_url'] ?? ''),
+            'return_url' => $returnUrl,
             'name' => (string) $order['trade_no'],
             'money' => number_format(((int) $order['total_amount']) / 100, 2, '.', ''),
             'clientip' => $this->clientIp(),
@@ -177,6 +205,28 @@ class EpayMapi
         if (!filter_var($this->mapiUrl(), FILTER_VALIDATE_URL)) {
             abort(500, 'EPay URL 格式错误');
         }
+    }
+
+    private function checkAmount($amount)
+    {
+        $min = $this->amount('min_amount');
+        $max = $this->amount('max_amount');
+        if ($min > 0 && $max > 0 && $min > $max) abort(500, '支付金额限制配置错误');
+        if ($min > 0 && $amount < $min) abort(500, '最小支付金额是' . $this->formatAmount($min) . '元');
+        if ($max > 0 && $amount > $max) abort(500, '最大支付金额是' . $this->formatAmount($max) . '元');
+    }
+
+    private function amount($key)
+    {
+        $value = $this->config[$key] ?? 0;
+        if ($value === '' || $value === null) return 0.0;
+        if (!is_numeric($value) || (float) $value < 0) abort(500, '支付金额限制配置错误：' . $key);
+        return round((float) $value, 2);
+    }
+
+    private function formatAmount($value)
+    {
+        return rtrim(rtrim(number_format($value, 2, '.', ''), '0'), '.');
     }
 
     private function clientIp()
