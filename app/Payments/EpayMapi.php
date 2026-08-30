@@ -39,12 +39,12 @@ class EpayMapi
             ],
             'type' => [
                 'label' => 'TYPE',
-                'description' => '必填：alipay 或 wxpay；MAPI 不允许留空',
+                'description' => '必填，如: alipay, wxpay',
                 'type' => 'input',
             ],
             'return_domain' => [
                 'label' => '自定义跳转域名',
-                'description' => '支付完成后用户跳转的域名（如：https://yourdomain.com），留空使用默认域名',
+                'description' => '自定义支付成功后的跳转地址，留空使用默认',
                 'type' => 'input',
             ],
             'min_amount' => ['label' => '最小付款金额（元）', 'description' => '留空或0表示不限制', 'type' => 'input'],
