@@ -70,13 +70,16 @@ class KnowledgeController extends Controller
         return $start . $substr . $end;
     }
 
-    private function formatAccessData(&$body)
-    {
-        while (strpos($body, '<!--access start-->') !== false) {
-            $accessData = $this->getBetween($body, '<!--access start-->', '<!--access end-->');
-            if ($accessData) {
-                $body = str_replace($accessData, '<div class="v2board-no-access">'. __('You must have a valid subscription to view content in this area') .'</div>', $body);
-            }
+private function formatAccessData(&$body)
+{
+    // 防死循环：必须起止标记同时存在才处理；若替换无进展（拼出的块在原文中找不到）则退出。
+    // 否则一篇只有 <!--access start--> 而漏了结束标记的文档会让本请求挂死。
+    while (strpos($body, '<!--access start-->') !== false && strpos($body, '<!--access end-->') !== false) {
+        $accessData = $this->getBetween($body, '<!--access start-->', '<!--access end-->');
+        if ($accessData === '' || strpos($body, $accessData) === false) {
+            break;
         }
+        $body = str_replace($accessData, '<div class="v2board-no-access">'. __('You must have a valid subscription to view content in this area') .'</div>', $body);
     }
+}
 }
