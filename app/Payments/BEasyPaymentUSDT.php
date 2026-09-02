@@ -27,19 +27,55 @@ class BEasyPaymentUSDT {
                 'label' => '交易类型',
                 'description' => '您的 BEPUSDT 交易类型',
                 'type' => 'input',
-            ]
+            ],
+            'bepusdt_return_domain' => [
+                'label' => '自定义跳转域名',
+                'description' => '自定义支付成功后的跳转地址，留空使用默认',
+                'type' => 'input',
+            ],
+            'bepusdt_min_amount' => [
+                'label' => '最小付款金额（元）',
+                'description' => '留空或填 0 表示不限制',
+                'type' => 'input',
+            ],
+            'bepusdt_max_amount' => [
+                'label' => '最大付款金额（元）',
+                'description' => '留空或填 0 表示不限制',
+                'type' => 'input',
+            ],
         ];
     }
 
     public function pay($order)
     {
+        $amount = round(((int) $order['total_amount']) / 100, 2);
+        $this->checkAmount($amount);
+
+        // 创建return_url的副本用于修改
+        $returnUrl = $order['return_url'];
+        
+        // 仅当配置了自定义域名时才修改跳转地址
+        if (!empty($this->config['bepusdt_return_domain'])) {
+            $customDomain = rtrim($this->config['bepusdt_return_domain'], '/');
+            $parsedUrl = parse_url($returnUrl);
+            
+            // 构建新URL：自定义域名 + 原路径 + 原参数
+            $newUrl = $customDomain;
+            if (isset($parsedUrl['path'])) $newUrl .= $parsedUrl['path'];
+            if (isset($parsedUrl['query'])) $newUrl .= '?' . $parsedUrl['query'];
+            if (isset($parsedUrl['fragment'])) $newUrl .= '#' . $parsedUrl['fragment'];
+            
+            $returnUrl = $newUrl;
+        }
+
         $params = [
-            'amount' => $order['total_amount'] / 100,
+            'amount' => $amount,
             'trade_type' => $this->config['bepusdt_trade_type'],
             'notify_url' => $order['notify_url'],
             'order_id' => $order['trade_no'],
-            'redirect_url' => $order['return_url']
+            'redirect_url' => $returnUrl  // 使用可能修改后的跳转地址
         ];
+        
         ksort($params);
         reset($params);
         $str = stripslashes(urldecode(http_build_query($params))) . $this->config['bepusdt_apitoken'];
@@ -66,6 +102,30 @@ class BEasyPaymentUSDT {
 
     public function notify($params)
     {
+        // 【安全备份与异常恢复】
+        if (is_string($params)) {
+            // 1. 先保存一份原始字符串备份
+            $originalParams = $params; 
+
+            try {
+                $decoded = json_decode($params, true);
+                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                    $params = $decoded;
+                } else {
+                    // 如果没报错但解析结果不是数组，尝试从全局请求恢复
+                    $params = request()->all();
+                }
+            } catch (\Throwable $e) {
+                // 2. 异常恢复：发生致命异常时，日志里记录刚才备份的原始数据
+                \Log::error('BEPUSDT Notify JSON decode exception: ' . $e->getMessage(), [
+                    'original_string' => $originalParams
+                ]);
+                
+                // 3. 尝试通过 Laravel 全局请求抓取数据进行恢复
+                $params = request()->all();
+            }
+        }
+        
         $sign = $params['signature'];
         unset($params['signature']);
         ksort($params);
@@ -85,5 +145,35 @@ class BEasyPaymentUSDT {
             'callback_no' => $params['trade_id'],
             'custom_result' => 'ok'
         ];
+    }
+
+    private function checkAmount($amount)
+    {
+        $min = $this->configuredAmount('bepusdt_min_amount');
+        $max = $this->configuredAmount('bepusdt_max_amount');
+        if ($min > 0 && $max > 0 && $min > $max) {
+            abort(500, '支付金额限制配置错误');
+        }
+        if ($min > 0 && $amount < $min) {
+            abort(500, '最小支付金额是' . $this->formatAmount($min) . '元');
+        }
+        if ($max > 0 && $amount > $max) {
+            abort(500, '最大支付金额是' . $this->formatAmount($max) . '元');
+        }
+    }
+
+    private function configuredAmount($key)
+    {
+        $value = $this->config[$key] ?? 0;
+        if ($value === '' || $value === null) return 0.0;
+        if (!is_numeric($value) || (float) $value < 0) {
+            abort(500, '支付金额限制配置错误：' . $key);
+        }
+        return round((float) $value, 2);
+    }
+
+    private function formatAmount($value)
+    {
+        return rtrim(rtrim(number_format($value, 2, '.', ''), '0'), '.');
     }
 }
