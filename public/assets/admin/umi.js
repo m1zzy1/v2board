@@ -73748,9 +73748,9 @@
                         this.setState({
                             visible: !0,
                             paymentMethods: e,
-                            selectPaymentMethod: this.state.selectPaymentMethod || e[0]
+                            selectPaymentMethod: this.state.selectPaymentMethod || this.state.submit.payment || e[0]
                         }, ()=>{
-                            this.onSelectPaymentMethod(this.state.selectPaymentMethod || e[0])
+                            this.onSelectPaymentMethod(this.state.selectPaymentMethod)
                         }
                         )
                     }
