@@ -59,6 +59,18 @@ class AuthController extends Controller
                 abort(500, __('You must use the invitation code to register'));
             }
         }
+        // 反随机邮箱注册：机器批量注册的邮箱本地部分几乎都是"大小写混写"的随机串，
+        // 而真人邮箱极少使用大写。主流邮箱服务收信不区分大小写，统一要求全小写即可。
+        // 判据：本地部分含大写字母 → 拒绝。
+        if ((int)config('v2board.random_alias_block_enable', 0)) {
+            $emailInput = $request->input('email');
+            if (is_string($emailInput) && strpos($emailInput, '@') !== false) {
+                $local = explode('@', $emailInput)[0];
+                if (preg_match('/[A-Z]/', $local)) {
+                    abort(500, __('注册失败：请使用全小写字母的邮箱注册'));
+                }
+            }
+        }
         $email = $request->input('email');
         $cacheKeyEmail = is_string($email) ? strtolower(trim($email)) : '';
         if ((int)config('v2board.email_verify', 0)) {

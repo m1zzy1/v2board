@@ -5808,6 +5808,12 @@
                     checked: parseInt(_.email_gmail_limit_enable),
                     onChange: e=>this.set("safe", "email_gmail_limit_enable", e ? 1 : 0)
                 })), f.a.createElement(m, {
+                    title: "\u62e6\u622a\u968f\u673a\u90ae\u7bb1\u6ce8\u518c",
+                    description: "\u5f00\u542f\u540e\uff0c\u90ae\u7bb1\u540d\u542b\u5927\u5199\u5b57\u6bcd\u7684\u6ce8\u518c\u5c06\u88ab\u62d2\u7edd\uff0c\u9700\u4f7f\u7528\u5168\u5c0f\u5199\u90ae\u7bb1\uff08\u9632\u673a\u5668\u4eba\u6279\u91cf\u6ce8\u518c\uff09"
+                }, f.a.createElement(l["a"], {
+                    checked: parseInt(_.random_alias_block_enable),
+                    onChange: e=>this.set("safe", "random_alias_block_enable", e ? 1 : 0)
+                })), f.a.createElement(m, {
                     title: "\u5b89\u5168\u6a21\u5f0f",
                     description: "\u5f00\u542f\u540e\u9664\u4e86\u7ad9\u70b9URL\u4ee5\u5916\u7684\u7ed1\u5b9a\u672c\u7ad9\u70b9\u7684\u57df\u540d\u8bbf\u95ee\u90fd\u5c06\u4f1a\u88ab403\u3002"
                 }, f.a.createElement(l["a"], {
